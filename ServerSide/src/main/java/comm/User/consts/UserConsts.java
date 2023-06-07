@@ -1,4 +1,4 @@
-package User.consts;
+package comm.User.consts;
 
 public class UserConsts {
 

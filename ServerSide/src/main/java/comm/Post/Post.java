@@ -1,15 +1,12 @@
-package Post;
+package comm.Post;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import comm.core.BaseEntity;
+
+import jakarta.persistence.Entity;
 
 @Entity
-public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private final Long id;
+public class Post extends BaseEntity {
+
     private String title;
     private String content;
 
@@ -17,7 +14,7 @@ public class Post {
     //create date instance variable
 
     protected Post(){
-        id = null;
+        super();
     }
 
     public Post(String title, String content, String author){

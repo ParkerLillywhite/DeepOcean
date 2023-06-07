@@ -1,17 +1,12 @@
-package User;
+package comm.User;
 
-import User.consts.UserConsts.Role;
+import comm.User.consts.UserConsts.Role;
+import comm.core.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private final Long id;
+public class User extends BaseEntity {
     private String username;
     private String password;
     private String email;
@@ -19,7 +14,7 @@ public class User {
     private Role accountStatus;
 
     protected User(){
-        id = null;
+        super();
     }
 
     public User(String username, String password, String email){
