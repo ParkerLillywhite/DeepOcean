@@ -1,8 +1,10 @@
 package comm.Post;
 
+import comm.User.User;
 import comm.core.BaseEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Post extends BaseEntity {
@@ -10,18 +12,27 @@ public class Post extends BaseEntity {
     private String title;
     private String content;
 
-    private String author;
+    @ManyToOne
+    private User user;
+
     //create date instance variable
 
     protected Post(){
         super();
     }
 
-    public Post(String title, String content, String author){
+    public Post(String title, String content){
         this();
         this.title = title;
         this.content = content;
-        this.author = author;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -32,19 +43,11 @@ public class Post extends BaseEntity {
         return content;
     }
 
-    public String getAuthor() {
-        return author;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 }
