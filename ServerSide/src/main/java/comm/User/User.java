@@ -1,26 +1,43 @@
 package comm.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import comm.User.consts.UserConsts.Role;
 import comm.core.BaseEntity;
 import comm.Post.Post;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class User extends BaseEntity {
+
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+    @NotNull
+    @Size(min = 2, max = 140)
     private String username;
+
+    @NotNull
+    @Size(min = 5, max = 140)
+    @JsonIgnore
     private String password;
+
+    @Nullable
     private String email;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts;
 
-    private Role accountStatus;
+    @JsonIgnore
+    private String[] roles;
 
     protected User(){
         super();
@@ -30,9 +47,9 @@ public class User extends BaseEntity {
     public User(String username, String password, String email){
         this();
         this.username = username;
-        this.password = password;
+        setPassword(password);
         this.email = email;
-        this.accountStatus = accountStatus;
+        this.roles = roles;
     }
 
     public List<Post> getPosts() {
@@ -57,7 +74,7 @@ public class User extends BaseEntity {
     }
 
     public void setPassword(String password){
-        this.password = password;
+        this.password = PASSWORD_ENCODER.encode(password);
     }
 
     public String getEmail(){
@@ -68,11 +85,11 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public Role getAccountStatus(){
-        return accountStatus;
+    public String[] getRoles(){
+        return roles;
     }
 
-    public void setAccountStatus(Role role){
-        this.accountStatus = role;
+    public void setRoles(String[] roles){
+        this.roles = roles;
     }
 }
