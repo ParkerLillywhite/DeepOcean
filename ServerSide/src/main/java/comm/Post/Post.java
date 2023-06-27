@@ -13,7 +13,7 @@ public class Post extends BaseEntity {
     private String content;
 
     @ManyToOne
-    private User author;
+    private User user;
 
     //create date instance variable
 
@@ -28,11 +28,11 @@ public class Post extends BaseEntity {
     }
 
     public User getUser() {
-        return author;
+        return user;
     }
 
     public void setUser(User user) {
-        this.author = author;
+        this.user = user;
     }
 
     public String getTitle() {
