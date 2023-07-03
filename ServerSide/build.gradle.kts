@@ -2,6 +2,7 @@ plugins {
     id("java")
     id("org.springframework.boot") version "3.0.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("io.freefair.lombok") version "5.3.0"
 }
 
 group = "org.example"
@@ -23,10 +24,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.projectlombok:lombok:1.18.26")
+    implementation("org.projectlombok:lombok:1.18.20")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.mockito:mockito-core:2.24.5")
     testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
+
 }
 
 sourceSets{
