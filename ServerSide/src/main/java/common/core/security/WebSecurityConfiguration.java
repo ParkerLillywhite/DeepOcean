@@ -1,4 +1,4 @@
-package comm.core.security;
+package common.core.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

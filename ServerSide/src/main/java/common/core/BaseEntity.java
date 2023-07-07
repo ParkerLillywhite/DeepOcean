@@ -1,4 +1,4 @@
-package comm.core;
+package common.core;
 
 import jakarta.persistence.*;
 

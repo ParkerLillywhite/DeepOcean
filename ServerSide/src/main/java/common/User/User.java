@@ -1,4 +1,4 @@
-package comm.User;
+package common.User;
 
 
 import jakarta.persistence.Entity;
