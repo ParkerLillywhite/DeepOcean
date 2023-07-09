@@ -78,4 +78,45 @@ public class SinglyLinkedList {
         }
         current.next = newNode;
     }
+
+    public void delete(int position) {
+        if(position == 1){
+            head = head.next;
+        } else {
+            ListNode previousNode = head;
+            int nodeCount = 1;
+            while(nodeCount < position - 1){
+                previousNode = previousNode.next;
+                nodeCount++;
+            }
+            ListNode currentNode = previousNode.next;
+            previousNode.next = currentNode.next;
+        }
+    }
+
+    public ListNode deleteFirst() {
+        if(head == null){
+            return  null;
+        }
+
+        ListNode temporaryNode = head;
+        head = head.next;
+        temporaryNode.next = null;
+        return temporaryNode;
+    }
+
+    public ListNode deleteLast(){
+        if(head == null || head.next == null){
+            return head;
+        }
+        ListNode currentNode = head;
+        ListNode previousNode = null;
+
+        while(currentNode.next != null) {
+            previousNode = currentNode;
+            currentNode.next = currentNode;
+        }
+        previousNode.next = null; // break the chain "deleting" current
+        return currentNode;
+    }
 }
