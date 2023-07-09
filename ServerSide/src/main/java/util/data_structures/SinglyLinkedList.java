@@ -119,4 +119,94 @@ public class SinglyLinkedList {
         previousNode.next = null; // break the chain "deleting" current
         return currentNode;
     }
+
+    public boolean checkIfExists(ListNode head, int searchKey){
+        if(head == null){
+            return false;
+        }
+
+        ListNode current = head;
+
+        while(current != null){
+            if(current.data == searchKey) {
+                return true;
+            }
+            current = current.next;
+        }
+        return false;
+    }
+
+    public ListNode reverse(){
+
+        if(head == null){
+            return head;
+        }
+
+        ListNode current = head;
+        ListNode previous = null;
+        ListNode next = null;
+
+        while(current != null) {
+            next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
+        }
+
+        return previous;
+    }
+
+    public ListNode findMiddle() {
+        if(head == null){
+            return null;
+        }
+
+        ListNode fastPointer = head;
+        ListNode slowPointer = head;
+
+        while(fastPointer != null && fastPointer.next != null){
+            slowPointer = slowPointer.next;
+            fastPointer = fastPointer.next.next;
+        }
+        return slowPointer;
+    }
+
+    public ListNode getNthNodeFromEnd(int n) {
+        if(head == null){
+            return null;
+        }
+
+        if(n <= 0) {
+            throw new IllegalArgumentException("Invalid Value: " + n);
+        }
+
+        ListNode mainPointer = head;
+        ListNode referencePointer = head;
+        int count = 0;
+
+        while(count < n){
+            if(referencePointer == null){
+                throw new IllegalArgumentException(n + " is greater than the number of nodes in list.");
+            }
+            referencePointer = referencePointer.next;
+            count++;
+        }
+
+        while(referencePointer != null){
+            referencePointer = referencePointer.next;
+            mainPointer = mainPointer.next;
+        }
+        return mainPointer;
+    }
+
+    public void removeDuplicates(){
+        ListNode current = head;
+        while(current != null && current.next != null){
+            if(current.data == current.next.data){
+                current.next = current.next.next;
+            } else {
+                current = current.next;
+            }
+        }
+    }
 }
