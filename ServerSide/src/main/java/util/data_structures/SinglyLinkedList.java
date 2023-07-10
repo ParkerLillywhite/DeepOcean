@@ -79,6 +79,41 @@ public class SinglyLinkedList {
         current.next = newNode;
     }
 
+    public ListNode insertWithSortedList(int value) {
+        ListNode newNode = new ListNode(value);
+        if(head == null){
+            return newNode;
+        }
+
+        ListNode current = head;
+        ListNode temp = null;
+
+        while(current != null && current.data < newNode.data) {
+            temp = current;
+            current = current.next;
+        }
+        newNode.next = current;
+        temp.next = newNode;
+        return head;
+    }
+
+    public void deleteSorted(int position) {
+        ListNode temp = null;
+        ListNode current = head;
+
+        if(current != null && current.data == position){
+            head = current.next;
+            return;
+        }
+
+        while(current != null && current.data != position){
+            temp = current;
+            current = current.next;
+        }
+        if(current == null) return;
+        temp.next = current.next;
+    }
+
     public void delete(int position) {
         if(position == 1){
             head = head.next;
@@ -200,6 +235,10 @@ public class SinglyLinkedList {
     }
 
     public void removeDuplicates(){
+
+        if(head == null){
+            return;
+        }
         ListNode current = head;
         while(current != null && current.next != null){
             if(current.data == current.next.data){
@@ -208,5 +247,90 @@ public class SinglyLinkedList {
                 current = current.next;
             }
         }
+    }
+
+    public boolean containsLoop(){
+        ListNode fastPointer = head;
+        ListNode slowPointer = head;
+
+        while(fastPointer != null && fastPointer.next != null){
+            fastPointer = fastPointer.next.next;
+            slowPointer = slowPointer.next;
+        }
+        if(slowPointer == fastPointer){
+            return true;
+        }
+
+        return false;
+    }
+
+    public ListNode getStartOfLoop(){
+        ListNode fastPointer = head;
+        ListNode slowPointer = head;
+
+        while(fastPointer != null && fastPointer.next != null){
+            fastPointer = fastPointer.next.next;
+            slowPointer = slowPointer.next;
+        }
+        if(slowPointer == fastPointer){
+            return getStartOfLoop(slowPointer);
+        }
+        return null;
+    }
+
+    public ListNode getStartOfLoop(ListNode pointer){
+        ListNode temp = head;
+        while(temp != pointer){
+            temp = temp.next;
+            pointer = pointer.next;
+        }
+        return temp;
+    }
+
+    public void deleteLoop(){
+        ListNode slowPointer = head;
+        ListNode fastPointer = head;
+
+        while(fastPointer != null && fastPointer.next != null){
+            fastPointer = fastPointer.next.next;
+            slowPointer = slowPointer.next;
+        }
+        if(slowPointer == fastPointer){
+            changeNextToNull(slowPointer);
+            return;
+        }
+    }
+
+    private void changeNextToNull(ListNode pointer){
+        ListNode temp = head;
+        while(temp.next != pointer.next){
+            temp = temp.next;
+            pointer = pointer.next;
+        }
+        pointer.next = null;
+        return;
+    }
+
+    public ListNode merge(ListNode a, ListNode b){
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+
+        while(a != null && b != null){
+            if(a.data <= b.data){
+                tail.next = a;
+                a = a.next;
+            } else {
+                tail.next = b;
+                b = b.next;
+            }
+            tail = tail.next;
+        }
+
+        if(a == null){
+            tail.next = b;
+        } else {
+            tail.next = a;
+        }
+        return dummy.next;
     }
 }
