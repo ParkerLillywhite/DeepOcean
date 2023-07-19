@@ -37,6 +37,7 @@ public class Sort {
                 arr[j + 1] = arr[j];
                 j = j - 1;
             }
+            //since j is brought back one position this will work
             arr[j + 1] = temp;
         }
     }
@@ -68,7 +69,7 @@ public class Sort {
     }
 
 
-    //merges two sorteda arrays.
+    //merges two sorted arrays.
     public void merge(int[] arr, int[] temp, int low, int mid, int high) {
 
         for(int i = low; i < high; i++) {
@@ -81,7 +82,7 @@ public class Sort {
                 arr[k] = temp[i];
                 i++;
             } else {
-                temp[k] = temp[j];
+                arr[k] = temp[j];
                 j++;
             }
             k++;
@@ -93,4 +94,50 @@ public class Sort {
         }
 
     }
+
+    public void quickSort(int[] arr, int low, int high) {
+        if(low < high) {
+            int p = partition(arr, low, high);
+            quickSort(arr, low, p - 1);
+            quickSort(arr, p + 1, high);
+        }
+    }
+
+    public int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low;
+        int j = low;
+        while(i <= high) {
+            if(arr[i] <= pivot) {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+                j++;
+            }
+            i++;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
