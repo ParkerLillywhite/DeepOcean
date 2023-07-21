@@ -116,6 +116,7 @@ public class Sort {
             }
             i++;
         }
+        return j - 1;
     }
 }
 
