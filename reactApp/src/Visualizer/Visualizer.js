@@ -10,6 +10,7 @@ const Visualizer = () => {
         if (!canvas) {
             return; // Canvas element not yet available
         }
+        console.log("hello");
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -42,12 +43,9 @@ const Visualizer = () => {
             <div className={style.main}>
                 <div className={style.body}>
                     <canvas className={style.canvas}>
-
+                        
                     </canvas>
-
                 </div>
-
-
             </div>
         </Layout>
 
