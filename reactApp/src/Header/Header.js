@@ -13,8 +13,8 @@ const Header = () => {
                 </div>
             )}
             {!location.pathname.includes('visualizer') && (
-                <div className="visualizer" onClick={() => navigate('visualizer')}>
-                    visualizer
+                <div className="visualizer" onClick={() => navigate('microphone-visualizer')}>
+                    Microphone
                 </div>
             )}
 

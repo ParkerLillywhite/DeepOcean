@@ -6,9 +6,22 @@ main {
 
 body {
     overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 canvas {
+    position: absolute;
     background: black;
+    left: 0;
     height: 100vh;
     width: 100vw;
+}
+
+audio1 {
+    width: 50%;
+    margin: 50px auto;
+    display: block;
 }
