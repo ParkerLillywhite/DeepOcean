@@ -7,21 +7,11 @@ const Visualizer = () => {
 
     const [audioSource, setAudioSource] = useState(null);
 
-    const handleBase64Conversion = (audioFile, callback) => {
-        const reader =  new FileReader();
-        reader.onload = (event) => {
-            const base64String = event.target.result.split(',')[1];
-            callback(base64String);
-        }
-        reader.readAsDataURL(audioFile)
-    }
-
     const handleAudioFileUpload = (event) => {
         const file = event.target.files[0];
         if(file) {
-            handleBase64Conversion(file, (base64String) => {
-                setAudioSource(base64String);
-            });
+            const audioUrl = URL.createObjectURL(file);
+            setAudioSource(audioUrl);
         }
     }
 
@@ -32,14 +22,27 @@ const Visualizer = () => {
     const canvasRef = useRef(null);
     const audio1Ref = useRef(null);
 
+    let audioSourceForContext;
+    let analyser;
+
     const playLoadedSound = () => {
-        audio1.play();
+        if(audio1.src) {
+            audio1.play();
+            audioSourceForContext = audioCtx.createMediaElementSource(audio1);
+            analyser = audioCtx.createAnalyser();
+            audioSourceForContext.connect(analyser);
+            analyser.connect(audioCtx.destination);
+        }
     }
 
     useEffect(() => {
 
+        // if(audioSource && audio1Ref.current) {
+        //     audio1Ref.current.src = audioSource;
+        // }
+
         if(audioSource) {
-            audio1Ref.current.src = audioSource;
+            audio1.src = audioSource;
         }
 
         const canvas = canvasRef.current;
@@ -68,7 +71,7 @@ const Visualizer = () => {
             
             <div className={style.fileUpload}>
                 <input type="file" accept="audio/*" onChange={handleAudioFileUpload} />
-                {/* {audioSource && <audio controls src={`data:audio/wav;base64,${audioSource}`} />} */}
+                {/* {audioSource && <audio controls src={audioSource} />} */}
             </div>
 
             <button onClick={() => playLoadedSound()}>
@@ -77,7 +80,7 @@ const Visualizer = () => {
 
             <div className={style.body}>
                 <canvas ref={canvasRef} className={style.canvas}></canvas>
-                <audio className={style.audio1} controls></audio>
+                <audio className={style.audio1} ref={audio1Ref} controls></audio>
             </div>
         </div>
     )
