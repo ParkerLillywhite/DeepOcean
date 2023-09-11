@@ -6,6 +6,11 @@ import win from '../Assets/sounds/Win sound.wav';
 const Visualizer = () => {
 
     const [audioSource, setAudioSource] = useState(null);
+    const canvasRef = useRef(null);
+    const audio1Ref = useRef(null);
+    const analyserRef = useRef(null);
+    const audioCtxRef = useRef(null);
+    let ctx;
 
     const handleAudioFileUpload = (event) => {
         const file = event.target.files[0];
@@ -15,34 +20,53 @@ const Visualizer = () => {
         }
     }
 
-    let audio1 = new Audio();
-    audio1.src = audioSource;
-    const audioCtx = new AudioContext();
+    const createAudioContext = () => {
+        const audioCtx = new AudioContext();
+        audioCtxRef.current = audioCtx;
+        analyserRef.current = audioCtx.createAnalyser();
+        analyserRef.current.fftSize = 64;
+        analyserRef.current.connect(audioCtx.destination);
+    }
 
-    const canvasRef = useRef(null);
-    const audio1Ref = useRef(null);
+    const connectAudioSource = () => {
+        const audio1 = audio1Ref.current;
+        audio1.src = audioSource;
 
-    let audioSourceForContext;
-    let analyser;
+        const audioCtx = audioCtxRef.current;
+        const sourceNode = audioCtx.createMediaElementSource(audio1);
+        sourceNode.connect(analyserRef.current);
+        
+        analyserRef.current.fftSize = 64;
+    }
 
     const playLoadedSound = () => {
-        if(audio1.src) {
-            audio1.play();
-            audioSourceForContext = audioCtx.createMediaElementSource(audio1);
-            analyser = audioCtx.createAnalyser();
-            audioSourceForContext.connect(analyser);
-            analyser.connect(audioCtx.destination);
+        const audio1 = audio1Ref.current;
+        audio1.play();
+
+        const bufferLength = analyserRef.current.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const animate = () => {
+            const barWidth = canvasRef.current.width/bufferLength;
+            let x = 0;
+            ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+            analyserRef.current.getByteFrequencyData(dataArray);
+            for (let i  = 0; i < bufferLength; i++) {
+                const barHeight = dataArray[i];
+                ctx.fillStyle = 'white';
+                ctx.fillRect(x, canvasRef.current.height - barHeight, barWidth, barHeight);
+                x += barWidth;
+            }
+            requestAnimationFrame(animate);
         }
+        animate();
     }
 
     useEffect(() => {
-
-        // if(audioSource && audio1Ref.current) {
-        //     audio1Ref.current.src = audioSource;
-        // }
+        createAudioContext();
 
         if(audioSource) {
-            audio1.src = audioSource;
+            connectAudioSource();
         }
 
         const canvas = canvasRef.current;
@@ -51,23 +75,18 @@ const Visualizer = () => {
         }
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const ctx = canvas.getContext('2d');
+        ctx = canvas.getContext('2d');
+
+        return () => {
+            if(audioCtxRef.current) {
+                audioCtxRef.current.close();
+            }
+        }
+
     }, [audioSource]);
 
-    const playTestSound = () => {
-        const oscillator = audioCtx.createOscillator();
-        oscillator.connect(audioCtx.destination);
-        oscillator.type = 'triangle';
-        oscillator.start();
-        setTimeout(() => {
-            oscillator.stop();
-        }, 1000)
-    }
     return(
         <div className={style.main}>
-            <button onClick={() => playTestSound()}>
-                Test Visualizer
-            </button>
             
             <div className={style.fileUpload}>
                 <input type="file" accept="audio/*" onChange={handleAudioFileUpload} />
