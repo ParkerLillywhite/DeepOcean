@@ -101,6 +101,7 @@ class Microphone {
 
 const MicrophoneVisualizer = () => {
     const canvasRef = useRef(null);
+    const animationRef = useRef(null);
     const [visualizationMode, setVisualizationMode] = useState("bar");
 
     useEffect(() => {
@@ -172,9 +173,19 @@ const MicrophoneVisualizer = () => {
                 }
                 
             }
-            requestAnimationFrame(animate);
+            animationRef.current = requestAnimationFrame(animate);
         }
-        animate();
+
+        if(canvasRef.current) {
+            animate();
+        }
+        
+        return () => {
+            if(animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+            }
+        };
+
     }, [visualizationMode]);
 
     const handleVisualizationMode = () => {
